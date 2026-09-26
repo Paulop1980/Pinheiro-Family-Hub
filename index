@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#F6F1EA">
+<title>Pinheiro Family Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F6F1EA; --card: #FFFFFF; --ink: #22262E; --muted: #6E7380; --line: #ECE6DD;
+    --navy: #1F3A5F; --accent: #D9774B; --green: #3D8B62; --amber: #C98A1C; --red: #C2544A; --pink: #B35C8A;
+    --chip: #F2EDE6; --shadow: 0 1px 2px rgba(34,38,46,.05), 0 6px 18px rgba(34,38,46,.06);
+  }
+  body.night {
+    --bg: #14171C; --card: #1D2128; --ink: #E7E3DC; --muted: #9096A1; --line: #2A2F38; --chip: #262B33;
+    --navy: #8FB3E0; --shadow: none;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--bg); color: var(--ink); font: 18px/1.35 Inter, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; transition: background .6s, color .6s;
+    -webkit-user-select: none; user-select: none; overflow: hidden;
+  }
+  .wrap { height: 100vh; height: 100dvh; display: grid; grid-template-rows: auto 1fr; gap: 14px; padding: 16px 20px 18px; }
+
+  /* header */
+  header { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; }
+  .clock { font-family: Fraunces, Georgia, serif; font-weight: 650; font-size: 76px; line-height: .95; letter-spacing: -1px; color: var(--navy); }
+  .clock small { font-size: 30px; margin-left: 6px; color: var(--muted); font-weight: 500; }
+  .date { font-size: 21px; color: var(--muted); margin-top: 6px; font-weight: 500; }
+  .wx { display: flex; gap: 10px; align-items: stretch; }
+  .wx-now { display: flex; align-items: center; gap: 10px; padding-right: 14px; border-right: 1px solid var(--line); }
+  .wx-now .ico { font-size: 46px; }
+  .wx-now .t { font-family: Fraunces, serif; font-size: 46px; font-weight: 650; }
+  .wx-now .f { color: var(--muted); font-size: 15px; }
+  .wx-day { text-align: center; min-width: 70px; }
+  .wx-day .d { font-size: 13px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+  .wx-day .ico { font-size: 28px; line-height: 1.3; }
+  .wx-day .hl { font-size: 15px; } .wx-day .hl b { font-weight: 600; } .wx-day .rain { font-size: 12px; color: #4D82B8; }
+
+  /* morning banner */
+  .banner { flex: 1; display: flex; justify-content: center; align-self: center; }
+  .banner:empty { visibility: hidden; }
+  .bn { display: flex; align-items: center; gap: 14px; padding: 12px 22px; border-radius: 18px; background: var(--navy); color: #fff; box-shadow: var(--shadow); }
+  body.night .bn { color: #14171C; }
+  .bn .ico { font-size: 38px; }
+  .bn .big { font-family: Fraunces, serif; font-size: 34px; font-weight: 650; line-height: 1; }
+  .bn .sm { font-size: 16px; opacity: .85; margin-top: 4px; }
+  .bn.amber { background: var(--amber); color: #fff; }
+  .bn.red { background: var(--red); color: #fff; animation: pulse 1.6s ease-in-out infinite; }
+  .bn.calm { background: var(--green); color: #fff; }
+  .bn.party { background: linear-gradient(120deg, #D9774B, #B35C8A); color: #fff; }
+  @keyframes pulse { 50% { transform: scale(1.03); } }
+
+  /* birthdays */
+  .bdays { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .bd { background: var(--chip); border-radius: 14px; padding: 11px 12px; border-left: 5px solid var(--c); }
+  .bd .n { font-weight: 600; font-size: 17px; }
+  .bd .v { font-family: Fraunces, serif; font-size: 30px; font-weight: 650; color: var(--c); line-height: 1.1; margin-top: 2px; }
+  .bd .v small { font-family: Inter, sans-serif; font-size: 15px; color: var(--muted); font-weight: 500; }
+  .bd .s { font-size: 14px; color: var(--muted); }
+
+  /* grid */
+  main { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 14px; min-height: 0; }
+  .col { display: flex; flex-direction: column; gap: 14px; min-height: 0; }
+  .card { background: var(--card); border-radius: 18px; box-shadow: var(--shadow); padding: 14px 18px; min-height: 0; display: flex; flex-direction: column; }
+  .card.grow { flex: 1; }
+  .card h2 { margin: 0 0 10px; font: 600 13px/1 Inter, sans-serif; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
+  .card h2 .pill { letter-spacing: 0; text-transform: none; font-size: 13px; background: var(--chip); padding: 4px 9px; border-radius: 999px; color: var(--ink); font-weight: 500; }
+  .scroll { overflow-y: auto; min-height: 0; margin: 0 -6px; padding: 0 6px; }
+  .scroll::-webkit-scrollbar { width: 0; }
+  .empty { color: var(--muted); font-style: italic; padding: 4px 0; }
+
+  /* agenda */
+  .dayhead { font-family: Fraunces, serif; font-size: 23px; font-weight: 650; margin: 4px 0 6px; color: var(--navy); }
+  .dayhead span { font-family: Inter, sans-serif; font-size: 15px; font-weight: 500; color: var(--muted); margin-left: 6px; }
+  .ev { display: grid; grid-template-columns: 84px 1fr; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); }
+  .ev:first-of-type { border-top: 0; }
+  .ev .tm { font-weight: 600; font-size: 16px; color: var(--muted); padding-top: 2px; }
+  .ev .tt { font-weight: 500; font-size: 19px; }
+  .ev .loc { font-size: 15px; color: var(--muted); }
+  .ev.past { opacity: .45; }
+  .ev.now .tm { color: var(--accent); }
+  .up { display: grid; grid-template-columns: 72px 1fr; gap: 10px; padding: 6px 0; font-size: 16px; border-top: 1px solid var(--line); }
+  .up .d { color: var(--muted); font-weight: 600; font-size: 15px; }
+
+  /* big stats */
+  .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat { background: var(--chip); border-radius: 14px; padding: 11px 12px; }
+  .stat .k { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .stat .v { font-family: Fraunces, serif; font-size: 25px; font-weight: 650; margin-top: 2px; }
+  .stat .s { font-size: 15px; color: var(--muted); }
+  .stat.red .v { color: var(--red); } .stat.amber .v { color: var(--amber); }
+  .lunch { margin-bottom: 10px; }
+  .lunch .row { display: grid; grid-template-columns: 96px 1fr; gap: 10px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 17px; }
+  .lunch .row:first-child { border-top: 0; }
+  .lunch .row .d { font-weight: 600; color: var(--muted); font-size: 15px; }
+  .lunch .row.hl .d { color: var(--accent); }
+  .act { display: flex; gap: 12px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
+  .act:first-child { border-top: 0; padding-top: 0; }
+  .act .ball { font-size: 34px; width: 42px; text-align: center; }
+  .act .big { font-family: Fraunces, serif; font-size: 22px; font-weight: 650; }
+  .act .big span { font-family: Inter, sans-serif; font-size: 16px; font-weight: 500; color: var(--muted); }
+  .act .sub { color: var(--muted); font-size: 15px; }
+  .tag { display: inline-block; font-size: 13px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--chip); margin-right: 6px; margin-top: 6px; }
+  .tag.warn { background: #FBE7D9; color: #9A4A20; } body.night .tag.warn { background: #3A2A20; color: #F0B48E; }
+  .tag.ok { background: #DDF0E4; color: #2B6B49; } body.night .tag.ok { background: #1F3328; color: #8FD3AA; }
+  .meals .m { display: grid; grid-template-columns: 50px 1fr; gap: 8px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 16px; }
+  .meals .m:first-child { border-top: 0; }
+  .meals .m .d { font-weight: 600; color: var(--muted); font-size: 15px; }
+  .mealgrid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 18px; }
+  .mealgrid .m:nth-child(2) { border-top: 0; }
+  .meals .m.today { font-weight: 600; } .meals .m.today .d { color: var(--accent); }
+
+  /* checklists */
+  .who { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 10px 0 2px; display: flex; justify-content: space-between; }
+  .who:first-child { margin-top: 0; }
+  .chk { display: flex; align-items: center; gap: 12px; padding: 10px 2px; border-top: 1px solid var(--line); cursor: pointer; font-size: 18px; }
+  .who + .chk { border-top: 0; }
+  .box { flex: none; width: 28px; height: 28px; border-radius: 9px; border: 2px solid #CFC7BB; display: grid; place-items: center; transition: all .15s; }
+  body.night .box { border-color: #4A505B; }
+  .chk.done .box { background: var(--green); border-color: var(--green); }
+  .chk.done .box::after { content: ""; width: 12px; height: 6px; border: 3px solid #fff; border-top: 0; border-right: 0; transform: rotate(-45deg) translate(1px,-1px); }
+  .chk.done .lbl { text-decoration: line-through; color: var(--muted); }
+  .chk .meta { margin-left: auto; font-size: 14px; color: var(--muted); }
+  .avatar { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; font-size: 12px; color: #fff; margin-right: 6px; vertical-align: -5px; }
+
+  .foot { position: fixed; right: 18px; bottom: 8px; font-size: 12px; color: var(--muted); opacity: .7; }
+  .fsbtn { position: fixed; left: 14px; bottom: 8px; font: 500 13px Inter, sans-serif; color: var(--muted); background: var(--chip); border: 0; border-radius: 999px; padding: 6px 12px; opacity: .8; cursor: pointer; }
+  .fsbtn:active { opacity: 1; }
+  body.fs .fsbtn { display: none; }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-size: 15px; opacity: 0; transition: opacity .25s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+  .setup { max-width: 640px; margin: 80px auto; background: var(--card); border-radius: 18px; padding: 24px 28px; box-shadow: var(--shadow); font-size: 17px; line-height: 1.5; }
+  .setup code { background: var(--chip); padding: 2px 6px; border-radius: 6px; font-size: 15px; }
+
+  @media (max-width: 900px) {
+    body { overflow: auto; }
+    .wrap { height: auto; }
+    main { grid-template-columns: 1fr; }
+    .clock { font-size: 52px; }
+    header { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="clock" id="clock">--:--</div>
+      <div class="date" id="date"></div>
+    </div>
+    <div class="banner" id="banner"></div>
+    <div class="wx" id="wx"></div>
+  </header>
+
+  <main>
+    <div class="col">
+      <section class="card grow">
+        <h2>Today <span class="pill" id="todayCount"></span></h2>
+        <div class="scroll" id="agenda"></div>
+      </section>
+      <section class="card">
+        <h2>Dinners this week</h2>
+        <div class="meals mealgrid" id="meals"></div>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="card grow">
+        <h2>Ava · School</h2>
+        <div class="scroll">
+          <div class="lunch" id="lunch"></div>
+          <div class="hero" id="schoolHero"></div>
+        </div>
+      </section>
+      <section class="card">
+        <h2>Activities &amp; Sports</h2>
+        <div id="soccer"></div>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="card grow">
+        <h2>Chores <span class="pill" id="choreCount"></span></h2>
+        <div class="scroll" id="chores"></div>
+      </section>
+      <section class="card">
+        <h2>Birthdays</h2>
+        <div class="bdays" id="bdays"></div>
+      </section>
+    </div>
+  </main>
+</div>
+<button class="fsbtn" id="fsbtn">⛶ Full screen</button>
+<div class="foot" id="foot"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== SETUP: paste your Apps Script Web App URL (ends in /exec) and the DASH_KEY from DashboardServer.gs =====
+const API_URL = 'https://script.google.com/macros/s/AKfycby9AQqzXH0zVAgI3AwnpMW6-DXpfiZcIoV4iIWrLKHfC1aN2AzRClFV-OfDts-xQX3BbQ/exec';
+const API_KEY = 'UML_Bourgeois!!47';
+// ========================================================================================================
+
+const PEOPLE = { Paulo: '#1F3A5F', Amy: '#B35C8A', Ava: '#D9774B', Everyone: '#6E7380' };
+const WX = c => c === 0 ? ['☀️','Clear'] : c <= 2 ? ['🌤️','Partly cloudy'] : c === 3 ? ['☁️','Cloudy'] : c <= 48 ? ['🌫️','Fog']
+  : c <= 57 ? ['🌦️','Drizzle'] : c <= 67 ? ['🌧️','Rain'] : c <= 77 ? ['🌨️','Snow'] : c <= 82 ? ['🌧️','Showers'] : c <= 86 ? ['🌨️','Snow showers'] : ['⛈️','Storms'];
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pd = s => { const [y,m,d] = s.slice(0,10).split('-').map(Number); return new Date(y, m-1, d); };
+const pdt = s => new Date(s);
+const fmtT = d => d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).replace(':00','').replace(' ', '').toLowerCase();
+const dow = d => d.toLocaleDateString('en-US', { weekday: 'short' });
+const md = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+const daysBetween = (a, b) => Math.round((pd(b) - pd(a)) / 86400000);
+let DATA = null;
+
+function tickClock() {
+  const n = new Date();
+  const h = n.getHours() % 12 || 12, m = String(n.getMinutes()).padStart(2, '0');
+  $('clock').innerHTML = `${h}:${m}<small>${n.getHours() < 12 ? 'am' : 'pm'}</small>`;
+  $('date').textContent = n.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+  document.body.classList.toggle('night', n.getHours() >= 20 || n.getHours() < 6);
+  renderBanner();
+}
+
+function render(d) {
+  DATA = d;
+  const today = d.today, tmrw = (() => { const t = pd(today); t.setDate(t.getDate()+1); return t; })();
+  const tmrwKey = key(tmrw);
+
+  // weather
+  if (d.weather) {
+    const [ico, lbl] = WX(d.weather.code);
+    $('wx').innerHTML = `<div class="wx-now"><div class="ico">${ico}</div><div><div class="t">${d.weather.temp}°</div><div class="f">${lbl} · feels ${d.weather.feels}°</div></div></div>` +
+      d.weather.days.slice(0, 4).map((w, i) => `<div class="wx-day"><div class="d">${i === 0 ? 'Today' : dow(pd(w.date))}</div><div class="ico">${WX(w.code)[0]}</div>
+        <div class="hl"><b>${w.hi}°</b> ${w.lo}°</div>${w.rain >= 30 ? `<div class="rain">💧${w.rain}%</div>` : '<div class="rain">&nbsp;</div>'}</div>`).join('');
+  }
+
+  // agenda
+  const now = new Date();
+  const byDay = {};
+  d.events.forEach(e => { const k = e.start.slice(0,10); (byDay[k] = byDay[k] || []).push(e);
+    if (e.allDay) { let s = pd(e.start); s.setDate(s.getDate()+1); while (s < pd(e.end)) { const kk = key(s); (byDay[kk] = byDay[kk] || []).push(e); s.setDate(s.getDate()+1); } } });
+  const evRow = e => {
+    const s = pdt(e.start), en = pdt(e.end);
+    const cls = !e.allDay && en < now ? 'past' : (!e.allDay && s <= now && en > now ? 'now' : '');
+    return `<div class="ev ${cls}"><div class="tm">${e.allDay ? 'All day' : fmtT(s)}</div><div><div class="tt">${esc(e.title)}</div>${e.location ? `<div class="loc">${esc(e.location)}</div>` : ''}</div></div>`;
+  };
+  const todayEv = byDay[today] || [], tmrwEv = byDay[tmrwKey] || [];
+  $('todayCount').textContent = todayEv.length ? `${todayEv.length} event${todayEv.length > 1 ? 's' : ''}` : 'Free day';
+  let html = todayEv.length ? todayEv.map(evRow).join('') : '<div class="empty">Nothing on the family calendar today.</div>';
+  html += `<div class="dayhead" style="margin-top:14px">Tomorrow<span>${dow(tmrw)} ${md(tmrw)}</span></div>`;
+  html += tmrwEv.length ? tmrwEv.map(evRow).join('') : '<div class="empty">Nothing planned.</div>';
+  const later = Object.keys(byDay).filter(k => k > tmrwKey).sort();
+  if (later.length) {
+    html += `<div class="dayhead" style="margin-top:14px">Coming up</div>`;
+    later.forEach(k => byDay[k].forEach(e => {
+      html += `<div class="up"><div class="d">${dow(pd(k))} ${pd(k).getDate()}</div><div>${esc(e.title)}${e.allDay ? '' : ` <span style="color:var(--muted)">· ${fmtT(pdt(e.start))}</span>`}</div></div>`;
+    }));
+  }
+  $('agenda').innerHTML = html;
+
+  // school hero
+  const nxt = t => d.school.find(s => s.type === t && s.end >= today);
+  const ns = nxt('No School'), er = nxt('Early Release');
+  const other = d.school.find(s => s.end >= today && !['No School','Early Release'].includes(s.type));
+  const away = s => { const n = daysBetween(today, s.date); return n <= 0 ? 'Today' : n === 1 ? 'Tomorrow' : `in ${n} days`; };
+  const stat = (k, s, cls) => s ? `<div class="stat ${cls}"><div class="k">${k}</div><div class="v">${dow(pd(s.date))} ${md(pd(s.date))}</div><div class="s">${esc(s.desc.replace(/ – dismissal 11:30/,''))} · ${away(s)}</div></div>` : '';
+  $('schoolHero').innerHTML = stat('No school', ns, 'red') + stat('Early release · 11:30', er, 'amber') +
+    (other && daysBetween(today, other.date) <= 21 ? `<div class="stat" style="grid-column:1/-1"><div class="k">Next up</div><div class="s" style="color:var(--ink);font-size:16px;margin-top:3px"><b>${dow(pd(other.date))} ${md(pd(other.date))}</b> · ${esc(other.desc)}</div></div>` : '') +
+    (d.info && (d.info.bus || d.info.pickup) ? `<div class="stat" style="grid-column:1/-1"><div class="k">Bus</div><div class="s" style="color:var(--ink);font-size:16px;margin-top:3px">${d.info.bus ? '#' + esc(d.info.bus) : ''} ${d.info.pickup ? '· pickup ' + esc(d.info.pickup) : ''} ${d.info.dropoff ? '· home ' + esc(d.info.dropoff) : ''}</div></div>` : '');
+  const lunches = d.lunch.slice(0, 2);
+  $('lunch').innerHTML = lunches.length ? lunches.map(l => `<div class="row ${l.date === today ? 'hl' : ''}"><div class="d">${l.date === today ? 'Lunch today' : dow(pd(l.date))}</div><div>${esc(l.menu)}</div></div>`).join('')
+    : '<div class="empty">No lunch menu loaded.</div>';
+
+  // activities & sports
+  const when = (dkey, timeStr) => {
+    const n = daysBetween(today, dkey);
+    return (n === 0 ? 'Today' : n === 1 ? 'Tomorrow' : dow(pd(dkey)) + ' ' + md(pd(dkey))) + ' · ' + timeStr;
+  };
+  const acts = [];
+  const s = d.soccer;
+  if (s) acts.push({ key: s.date + 'T09:45', html: `<div class="act"><div class="ball">⚽</div><div><div class="big">${when(s.date, '9:45')} <span>Soccer</span></div>
+      <div class="sub">${esc(s.place)} · ${s.left} game${s.left === 1 ? '' : 's'} left</div>
+      <span class="tag ${s.driver ? 'ok' : 'warn'}">${s.driver ? '🚗 ' + esc(s.driver) : 'Driver not set'}</span>${s.snack ? '<span class="tag warn">🍊 Our snack week</span>' : ''}</div></div>` });
+  const nowT = new Date();
+  ((d.config && d.config.activities) || []).forEach(a => {
+    const ev = d.events.find(e => !e.allDay && e.title.toLowerCase().includes(a.match.toLowerCase()) && pdt(e.end) > nowT);
+    if (!ev) return;
+    const st = pdt(ev.start);
+    acts.push({ key: ev.start.slice(0, 16), html: `<div class="act"><div class="ball">${a.icon}</div><div><div class="big">${when(ev.start.slice(0, 10), fmtT(st))} <span>${esc(a.label)}</span></div>
+      <div class="sub">${esc((ev.location || '').split(',')[0])}${st <= nowT ? ' · happening now' : ''}</div></div></div>` });
+  });
+  acts.sort((x, y) => x.key < y.key ? -1 : 1);
+  $('soccer').innerHTML = acts.length ? acts.map(x => x.html).join('') : '<div class="empty">Nothing scheduled this week.</div>';
+
+  // meals
+  $('meals').innerHTML = d.meals.length ? d.meals.map(m => `<div class="m ${m.date === today ? 'today' : ''}"><div class="d">${dow(pd(m.date))}</div><div>${m.dinner ? esc(m.dinner) : '<span style="color:var(--muted)">—</span>'}</div></div>`).join('')
+    : '<div class="empty">Set a week on the Meal Plan tab.</div>';
+
+  // chores
+  const groups = {};
+  d.chores.forEach(c => (groups[c.who] = groups[c.who] || []).push(c));
+  const open = d.chores.filter(c => !c.done).length;
+  $('choreCount').textContent = open ? `${open} open` : 'All done 🎉';
+  $('chores').innerHTML = Object.keys(groups).map(w => `<div class="who"><span><span class="avatar" style="background:${PEOPLE[w] || '#6E7380'}">${esc(w[0])}</span>${esc(w)}</span><span>${groups[w].filter(c => !c.done).length} left</span></div>` +
+    groups[w].map(c => `<div class="chk ${c.done ? 'done' : ''}" data-row="${c.row}"><div class="box"></div><div class="lbl">${esc(c.chore)}</div><div class="meta">${esc(c.day || c.freq || '')}</div></div>`).join('')).join('')
+    || '<div class="empty">No chores yet — add them on the Chores tab.</div>';
+
+  renderBirthdays(); renderBanner();
+  $('foot').textContent = 'Updated ' + new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+}
+
+const pad2 = n => String(n).padStart(2, '0');
+const key = d => d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+const hm = s => { const [H, M] = s.split(':').map(Number); return H * 60 + M; };
+const fmtHM = s => { const [H, M] = s.split(':').map(Number); return (H % 12 || 12) + ':' + pad2(M) + (H < 12 ? 'am' : 'pm'); };
+
+function nextBirthday(b, now) {
+  const born = pd(b.born), t0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  let nb = new Date(t0.getFullYear(), born.getMonth(), born.getDate());
+  if (nb < t0) nb = new Date(t0.getFullYear() + 1, born.getMonth(), born.getDate());
+  return { date: nb, days: Math.round((nb - t0) / 86400000), age: nb.getFullYear() - born.getFullYear() };
+}
+
+function renderBirthdays() {
+  if (!DATA || !DATA.config) return;
+  const now = new Date();
+  $('bdays').innerHTML = DATA.config.birthdays.map(b => {
+    const n = nextBirthday(b, now);
+    const v = n.days === 0 ? 'Today! 🎉' : n.days === 1 ? 'Tomorrow' : `${n.days}<small> days</small>`;
+    return `<div class="bd" style="--c:${b.color}"><div class="n">${esc(b.name)}</div><div class="v">${v}</div><div class="s">Turns ${n.age} · ${dow(n.date)} ${md(n.date)}</div></div>`;
+  }).join('');
+}
+
+function schoolStatus(now) {
+  const k = key(now), wd = now.getDay();
+  if (wd === 0 || wd === 6) return { school: false };
+  if (k < DATA.config.firstDay) return { school: false };
+  const last = DATA.school.find(s => s.type === 'Last Day');
+  if (last && k > last.date) return { school: false };
+  const off = DATA.school.find(s => s.type === 'No School' && s.date <= k && k <= s.end);
+  if (off) return { school: false, reason: off.desc };
+  const er = DATA.school.find(s => s.type === 'Early Release' && s.date <= k && k <= s.end);
+  return { school: true, early: !!er };
+}
+
+function renderBanner() {
+  if (!DATA || !DATA.config) return;
+  const now = new Date(), c = DATA.config;
+  const mins = now.getHours() * 60 + now.getMinutes();
+  const door = hm(c.outTheDoor), from = hm(c.bannerFrom);
+  const bday = c.birthdays.map(b => ({ b, n: nextBirthday(b, now) })).find(x => x.n.days === 0);
+  let html = '';
+  if (mins >= from && mins <= door + 15) {
+    const st = schoolStatus(now);
+    if (st.school) {
+      const left = door - mins;
+      const extra = st.early ? ' · Early release today, 11:30' : '';
+      if (left > 10) html = `<div class="bn"><div class="ico">🚌</div><div><div class="big">Out the door in ${left} min</div><div class="sm">Leave by ${fmtHM(c.outTheDoor)}${extra}</div></div></div>`;
+      else if (left > 5) html = `<div class="bn amber"><div class="ico">👟</div><div><div class="big">${left} min · shoes & backpack</div><div class="sm">Leave by ${fmtHM(c.outTheDoor)}${extra}</div></div></div>`;
+      else if (left > 0) html = `<div class="bn red"><div class="ico">🎒</div><div><div class="big">${left} min · head out!</div><div class="sm">Leave by ${fmtHM(c.outTheDoor)}${extra}</div></div></div>`;
+      else html = `<div class="bn red"><div class="ico">🚌</div><div><div class="big">Time to go!</div><div class="sm">It's past ${fmtHM(c.outTheDoor)}${extra}</div></div></div>`;
+    } else if (st.reason) {
+      html = `<div class="bn calm"><div class="ico">😴</div><div><div class="big">No school today</div><div class="sm">${esc(st.reason)}</div></div></div>`;
+    }
+  }
+  if (!html && bday) html = `<div class="bn party"><div class="ico">🎂</div><div><div class="big">Happy birthday, ${esc(bday.b.name)}!</div><div class="sm">${bday.n.age} today 🎉</div></div></div>`;
+  if ($('banner').innerHTML !== html) $('banner').innerHTML = html;
+}
+
+function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1800); }
+
+// ---- API (Apps Script web app, all GETs)
+async function api(params) {
+  const q = new URLSearchParams(Object.assign({ key: API_KEY, _: Date.now() }, params));
+  const r = await fetch(API_URL + '?' + q, { redirect: 'follow', cache: 'no-store' });
+  const j = await r.json();
+  if (j.error) throw new Error(j.error);
+  return j;
+}
+function load() {
+  api({}).then(render).catch(e => toast('Could not refresh: ' + e.message));
+}
+
+document.addEventListener('click', e => {
+  const el = e.target.closest('.chk'); if (!el) return;
+  const done = !el.classList.contains('done'); el.classList.toggle('done', done);
+  const row = +el.dataset.row;
+  const it = DATA.chores.find(x => x.row === row); if (it) it.done = done;
+  render(DATA);
+  api({ action: 'chore', row, done }).catch(err => { if (it) it.done = !done; render(DATA); toast('Not saved: ' + err.message); });
+});
+
+// ---- full screen + keep the screen awake where the browser allows it
+const fsEl = document.documentElement;
+function goFullscreen() {
+  const req = fsEl.requestFullscreen || fsEl.webkitRequestFullscreen;
+  if (!req) return toast('Full screen is not available in this browser');
+  Promise.resolve(req.call(fsEl)).catch(() => toast('Full screen was blocked by the browser'));
+}
+$('fsbtn').addEventListener('click', goFullscreen);
+document.addEventListener('fullscreenchange', () => document.body.classList.toggle('fs', !!document.fullscreenElement));
+document.addEventListener('webkitfullscreenchange', () => document.body.classList.toggle('fs', !!document.webkitFullscreenElement));
+async function keepAwake() {
+  try { if ('wakeLock' in navigator) await navigator.wakeLock.request('screen'); } catch (e) {}
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden) keepAwake(); });
+keepAwake();
+
+// ---- boot
+if (!API_URL || !API_KEY) {
+  document.querySelector('.wrap').innerHTML = `<div class="setup"><b>Almost there.</b> Open <code>index.html</code> and paste your Apps Script Web App URL into
+    <code>API_URL</code> and your <code>DASH_KEY</code> into <code>API_KEY</code> near the top of the &lt;script&gt; section.</div>`;
+} else {
+  tickClock(); setInterval(tickClock, 10000);
+  load(); setInterval(load, 5 * 60 * 1000);
+}
+</script>
+</body>
+</html>
