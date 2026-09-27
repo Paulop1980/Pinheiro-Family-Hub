@@ -9,18 +9,19 @@
 <meta name="theme-color" content="#F6F1EA">
 <title>Pinheiro Family Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #F6F1EA; --card: #FFFFFF; --ink: #22262E; --muted: #6E7380; --line: #ECE6DD;
     --navy: #1F3A5F; --accent: #D9774B; --green: #3D8B62; --amber: #C98A1C; --red: #C2544A; --pink: #B35C8A;
+    --gold: #F0B429; --gold-deep: #C98A1C;
     --chip: #F2EDE6; --shadow: 0 1px 2px rgba(34,38,46,.05), 0 6px 18px rgba(34,38,46,.06);
   }
   body.night {
     --bg: #14171C; --card: #1D2128; --ink: #E7E3DC; --muted: #9096A1; --line: #2A2F38; --chip: #262B33;
     --navy: #8FB3E0; --shadow: none;
   }
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; height: 100%; }
   body {
     background: var(--bg); color: var(--ink); font: 18px/1.35 Inter, system-ui, sans-serif;
@@ -44,33 +45,27 @@
   .wx-day .ico { font-size: 28px; line-height: 1.3; }
   .wx-day .hl { font-size: 15px; } .wx-day .hl b { font-weight: 600; } .wx-day .rain { font-size: 12px; color: #4D82B8; }
 
-  /* morning banner */
-  .banner { flex: 1; display: flex; justify-content: center; align-self: center; }
+  /* banner */
+  .banner { flex: 1; display: flex; justify-content: center; align-self: center; min-width: 0; }
   .banner:empty { visibility: hidden; }
-  .bn { display: flex; align-items: center; gap: 14px; padding: 12px 22px; border-radius: 18px; background: var(--navy); color: #fff; box-shadow: var(--shadow); }
+  .bn { display: flex; align-items: center; gap: 14px; padding: 12px 22px; border-radius: 18px; background: var(--navy); color: #fff; box-shadow: var(--shadow); max-width: 100%; }
   body.night .bn { color: #14171C; }
   .bn .ico { font-size: 38px; }
-  .bn .big { font-family: Fraunces, serif; font-size: 34px; font-weight: 650; line-height: 1; }
-  .bn .sm { font-size: 16px; opacity: .85; margin-top: 4px; }
+  .bn .big { font-family: Fraunces, serif; font-size: 32px; font-weight: 650; line-height: 1; }
+  .bn .sm { font-size: 16px; opacity: .88; margin-top: 5px; }
   .bn.amber { background: var(--amber); color: #fff; }
   .bn.red { background: var(--red); color: #fff; animation: pulse 1.6s ease-in-out infinite; }
   .bn.calm { background: var(--green); color: #fff; }
   .bn.party { background: linear-gradient(120deg, #D9774B, #B35C8A); color: #fff; }
+  .bn.eve { background: #2E3A52; color: #F4EBDD; }
   @keyframes pulse { 50% { transform: scale(1.03); } }
 
-  /* birthdays */
-  .bdays { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .bd { background: var(--chip); border-radius: 14px; padding: 11px 12px; border-left: 5px solid var(--c); }
-  .bd .n { font-weight: 600; font-size: 17px; }
-  .bd .v { font-family: Fraunces, serif; font-size: 30px; font-weight: 650; color: var(--c); line-height: 1.1; margin-top: 2px; }
-  .bd .v small { font-family: Inter, sans-serif; font-size: 15px; color: var(--muted); font-weight: 500; }
-  .bd .s { font-size: 14px; color: var(--muted); }
-
   /* grid */
-  main { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 14px; min-height: 0; }
+  main { display: grid; grid-template-columns: 1.1fr 1fr 1.05fr; gap: 14px; min-height: 0; }
   .col { display: flex; flex-direction: column; gap: 14px; min-height: 0; }
   .card { background: var(--card); border-radius: 18px; box-shadow: var(--shadow); padding: 14px 18px; min-height: 0; display: flex; flex-direction: column; }
   .card.grow { flex: 1; }
+  .card.hidden { display: none; }
   .card h2 { margin: 0 0 10px; font: 600 13px/1 Inter, sans-serif; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
   .card h2 .pill { letter-spacing: 0; text-transform: none; font-size: 13px; background: var(--chip); padding: 4px 9px; border-radius: 999px; color: var(--ink); font-weight: 500; }
   .scroll { overflow-y: auto; min-height: 0; margin: 0 -6px; padding: 0 6px; }
@@ -80,8 +75,9 @@
   /* agenda */
   .dayhead { font-family: Fraunces, serif; font-size: 23px; font-weight: 650; margin: 4px 0 6px; color: var(--navy); }
   .dayhead span { font-family: Inter, sans-serif; font-size: 15px; font-weight: 500; color: var(--muted); margin-left: 6px; }
+  .dayhead.mt { margin-top: 14px; }
   .ev { display: grid; grid-template-columns: 84px 1fr; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); }
-  .ev:first-of-type { border-top: 0; }
+  .dayhead + .ev { border-top: 0; }
   .ev .tm { font-weight: 600; font-size: 16px; color: var(--muted); padding-top: 2px; }
   .ev .tt { font-weight: 500; font-size: 19px; }
   .ev .loc { font-size: 15px; color: var(--muted); }
@@ -89,14 +85,24 @@
   .ev.now .tm { color: var(--accent); }
   .up { display: grid; grid-template-columns: 72px 1fr; gap: 10px; padding: 6px 0; font-size: 16px; border-top: 1px solid var(--line); }
   .up .d { color: var(--muted); font-weight: 600; font-size: 15px; }
+  .tmrw-strip { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 8px; }
+  .tmrw-strip .tag { margin: 0; font-size: 14px; padding: 5px 10px; }
 
-  /* big stats */
+  /* notes */
+  .note { padding: 6px 0; border-top: 1px solid var(--line); font-size: 17px; line-height: 1.3; display: flex; gap: 10px; align-items: baseline; }
+  .note:first-child { border-top: 0; padding-top: 0; }
+  .note span { flex: 1; }
+  .note .by { font-size: 13px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+
+  /* stats */
   .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .stat { background: var(--chip); border-radius: 14px; padding: 11px 12px; }
   .stat .k { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
   .stat .v { font-family: Fraunces, serif; font-size: 25px; font-weight: 650; margin-top: 2px; }
   .stat .s { font-size: 15px; color: var(--muted); }
   .stat.red .v { color: var(--red); } .stat.amber .v { color: var(--amber); }
+  .stat.wide { grid-column: 1 / -1; }
+  .stat .s.ink { color: var(--ink); font-size: 16px; margin-top: 3px; }
   .lunch { margin-bottom: 10px; }
   .lunch .row { display: grid; grid-template-columns: 96px 1fr; gap: 10px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 17px; }
   .lunch .row:first-child { border-top: 0; }
@@ -111,31 +117,139 @@
   .tag { display: inline-block; font-size: 13px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--chip); margin-right: 6px; margin-top: 6px; }
   .tag.warn { background: #FBE7D9; color: #9A4A20; } body.night .tag.warn { background: #3A2A20; color: #F0B48E; }
   .tag.ok { background: #DDF0E4; color: #2B6B49; } body.night .tag.ok { background: #1F3328; color: #8FD3AA; }
-  .meals .m { display: grid; grid-template-columns: 50px 1fr; gap: 8px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 16px; }
+  .tag.info { background: #DEE9F5; color: #1F3A5F; } body.night .tag.info { background: #22304A; color: #A9C4E6; }
+  .meals .m { display: grid; grid-template-columns: 50px 1fr; gap: 8px; padding: 5px 0; border-top: 1px solid var(--line); font-size: 16px; }
   .meals .m:first-child { border-top: 0; }
   .meals .m .d { font-weight: 600; color: var(--muted); font-size: 15px; }
   .mealgrid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 18px; }
   .mealgrid .m:nth-child(2) { border-top: 0; }
   .meals .m.today { font-weight: 600; } .meals .m.today .d { color: var(--accent); }
 
-  /* checklists */
-  .who { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 10px 0 2px; display: flex; justify-content: space-between; }
-  .who:first-child { margin-top: 0; }
-  .chk { display: flex; align-items: center; gap: 12px; padding: 10px 2px; border-top: 1px solid var(--line); cursor: pointer; font-size: 18px; }
-  .who + .chk { border-top: 0; }
-  .box { flex: none; width: 28px; height: 28px; border-radius: 9px; border: 2px solid #CFC7BB; display: grid; place-items: center; transition: all .15s; }
-  body.night .box { border-color: #4A505B; }
-  .chk.done .box { background: var(--green); border-color: var(--green); }
-  .chk.done .box::after { content: ""; width: 12px; height: 6px; border: 3px solid #fff; border-top: 0; border-right: 0; transform: rotate(-45deg) translate(1px,-1px); }
-  .chk.done .lbl { text-decoration: line-through; color: var(--muted); }
-  .chk .meta { margin-left: auto; font-size: 14px; color: var(--muted); }
-  .avatar { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; font-size: 12px; color: #fff; margin-right: 6px; vertical-align: -5px; }
+  /* countdowns */
+  .cds { display: flex; flex-direction: column; }
+  .cd { display: flex; gap: 10px; align-items: center; padding: 6px 0; border-top: 1px solid var(--line); }
+  .cd:first-child { border-top: 0; padding-top: 0; }
+  .cd .em { font-size: 24px; width: 30px; text-align: center; flex: none; }
+  .cd .n { font-weight: 600; font-size: 16px; line-height: 1.15; flex: 1; }
+  .cd .n .s { font-size: 13px; color: var(--muted); font-weight: 500; margin-left: 6px; }
+  .cd .v { font-family: Fraunces, serif; font-size: 24px; font-weight: 650; color: var(--c, var(--navy)); line-height: 1; white-space: nowrap; }
+  .cd .v small { font-family: Inter, sans-serif; font-size: 13px; color: var(--muted); font-weight: 500; }
+
+  /* ---------- STAR CHART (dashboard tiles) ---------- */
+  .kids { display: flex; flex-direction: column; gap: 12px; min-height: 0; overflow-y: auto; margin: 0 -6px; padding: 0 6px; }
+  .kids::-webkit-scrollbar { width: 0; }
+  .kid { --kid: var(--accent); border: 1px solid var(--line); border-radius: 16px; padding: 8px 12px 6px 14px; background: var(--card); position: relative; overflow: hidden; flex: none; }
+  .kid::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--kid); }
+  .kid-head { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 0 0 6px; }
+  .avatar { width: 38px; height: 38px; border-radius: 13px; background: var(--kid); color: #fff; display: grid; place-items: center; font-family: Fraunces, serif; font-weight: 650; font-size: 22px; flex: none; }
+  .kid-name { font-family: Fraunces, serif; font-weight: 650; font-size: 22px; flex: 1; line-height: 1.1; }
+  .kid-name .streak { font-family: Inter, sans-serif; font-size: 13px; font-weight: 600; color: var(--muted); margin-left: 6px; }
+  .kid-bal { font-family: Fraunces, serif; font-weight: 650; font-size: 26px; color: var(--gold-deep); white-space: nowrap; }
+  .kid-bal small { font-family: Inter, sans-serif; font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-left: 3px; }
+  .kid-open { font-size: 18px; color: var(--muted); opacity: .6; }
+  .progress { height: 8px; border-radius: 99px; background: var(--chip); overflow: hidden; }
+  .progress > span { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--gold), var(--gold-deep)); transition: width .5s cubic-bezier(.3,.8,.3,1); }
+  .goal { font-size: 13px; color: var(--muted); font-weight: 500; margin: 4px 0 4px; }
+  .goal b { color: var(--ink); }
+  .kc { display: flex; align-items: center; gap: 10px; padding: 5px 4px; border-top: 1px solid var(--line); cursor: pointer; font-size: 16px; font-weight: 500; }
+  .kc .em { font-size: 21px; width: 28px; text-align: center; flex: none; transition: transform .25s; }
+  .kc .lbl { flex: 1; }
+  .kc .check { width: 27px; height: 27px; border-radius: 9px; border: 2px solid color-mix(in srgb, var(--kid) 40%, var(--line)); display: grid; place-items: center; color: #fff; font-size: 15px; flex: none; transition: background .15s, border-color .15s; }
+  .kc.done .lbl { color: var(--muted); text-decoration: line-through; }
+  .kc.done .check { background: var(--kid); border-color: var(--kid); }
+  .kc.done .em { transform: scale(1.12); }
+  .kid .all { font-size: 14px; color: var(--green); font-weight: 600; padding: 4px 4px 0; }
+
+  /* ---------- KID SCREEN (drill-in) ---------- */
+  .ks { position: fixed; inset: 0; background: var(--bg); z-index: 50; display: none; flex-direction: column; padding: 16px 20px 18px; --kid: var(--accent); }
+  .ks.show { display: flex; }
+  .ks-top { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .ks-top .avatar { width: 54px; height: 54px; font-size: 30px; border-radius: 16px; }
+  .ks-top .name { font-family: Fraunces, serif; font-weight: 650; font-size: 38px; line-height: 1; flex: 1; }
+  .ks-top .name .streak { font-family: Inter, sans-serif; font-size: 15px; font-weight: 600; color: var(--muted); margin-left: 10px; }
+  .ks-top .bal { font-family: Fraunces, serif; font-weight: 650; font-size: 44px; color: var(--gold-deep); line-height: 1; }
+  .ks-top .bal small { font-family: Inter, sans-serif; font-size: 13px; color: var(--muted); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; display: block; text-align: right; }
+  .ks-close { width: 52px; height: 52px; border-radius: 16px; border: 1px solid var(--line); background: var(--card); font-size: 24px; color: var(--muted); cursor: pointer; display: grid; place-items: center; }
+  .ks-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1.25fr; gap: 14px; }
+  .ks .card h2 { margin-bottom: 8px; }
+  .bank { display: flex; gap: 14px; align-items: center; }
+  .jar { width: 74px; height: 92px; flex: none; }
+  .jar .glass { fill: rgba(255,255,255,.55); stroke: color-mix(in srgb, var(--kid) 45%, #cfc8cd); stroke-width: 2.2; }
+  body.night .jar .glass { fill: rgba(255,255,255,.08); }
+  .jar .lid { fill: var(--kid); }
+  .jar.celebrate { animation: jarBounce .7s ease; }
+  @keyframes jarBounce { 0%{transform:scale(1)} 30%{transform:scale(1.2)} 55%{transform:scale(.93)} 100%{transform:scale(1)} }
+  .bank-info { flex: 1; min-width: 0; }
+  .bank-info .goal { font-size: 16px; margin-top: 8px; }
+  .bank-life { font-size: 13px; color: var(--muted); font-weight: 500; }
+  .week { display: flex; gap: 6px; margin-top: 12px; }
+  .week .day { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .week .dot { width: 100%; max-width: 44px; aspect-ratio: 1; border-radius: 12px; background: var(--chip); display: grid; place-items: center; font-family: Fraunces, serif; font-weight: 650; font-size: 17px; color: var(--muted); border: 2px solid transparent; }
+  .week .day.has .dot { background: color-mix(in srgb, var(--gold) 32%, var(--card)); color: var(--ink); }
+  .week .day.today .dot { border-color: var(--kid); }
+  .week .dl { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: .04em; }
+  .ks-actions { display: flex; gap: 10px; margin-top: 12px; }
+  .abtn { flex: 1; border: 1px solid var(--line); border-radius: 14px; padding: 13px 10px; cursor: pointer; font: 600 17px Inter, sans-serif; background: var(--chip); color: var(--ink); display: flex; align-items: center; justify-content: center; gap: 7px; }
+  .abtn:active { transform: scale(.97); }
+  .abtn.spend { background: color-mix(in srgb, var(--kid) 14%, var(--card)); border-color: color-mix(in srgb, var(--kid) 30%, var(--card)); }
+  .abtn.locked { opacity: .55; }
+  .redeem { font-size: 15px; padding: 6px 0; border-top: 1px solid var(--line); display: flex; gap: 8px; align-items: center; }
+  .redeem:first-child { border-top: 0; }
+  .redeem .when { margin-left: auto; color: var(--muted); font-size: 13px; font-weight: 600; white-space: nowrap; }
+  .ks .kc { padding: 12px 6px; font-size: 21px; }
+  .ks .kc .em { font-size: 30px; width: 38px; }
+  .ks .kc .check { width: 36px; height: 36px; border-radius: 11px; font-size: 19px; }
+
+  /* store & bonus panels (inside kid screen) */
+  .panel { position: absolute; inset: 0; background: var(--bg); display: none; flex-direction: column; padding: 16px 20px 18px; z-index: 2; }
+  .panel.show { display: flex; }
+  .panel .ptop { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .panel .ptop h3 { font-family: Fraunces, serif; font-weight: 650; font-size: 32px; margin: 0; flex: 1; line-height: 1; }
+  .panel .ptop .bal { font-family: Fraunces, serif; font-weight: 650; font-size: 30px; color: var(--gold-deep); }
+  .rgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; overflow-y: auto; min-height: 0; padding: 2px; align-content: start; }
+  .rcard { background: var(--card); border: 2px solid var(--line); border-radius: 20px; padding: 28px 14px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; cursor: pointer; box-shadow: var(--shadow); }
+  .rcard .rem { font-size: 56px; }
+  .rcard .rl { font-weight: 600; font-size: 17px; line-height: 1.2; }
+  .rcard .rc { font-family: Fraunces, serif; font-weight: 650; color: var(--gold-deep); font-size: 20px; }
+  .rcard.afford { border-color: var(--gold); }
+  .rcard.afford:active { transform: scale(.96); }
+  .rcard.cant { opacity: .5; cursor: default; }
+  .rcard.cant .rc { color: var(--muted); font-size: 14px; }
+  .chips { display: flex; gap: 12px; flex-wrap: wrap; margin: 6px 0 18px; }
+  .chips button { border: 2px solid var(--line); background: var(--card); border-radius: 16px; padding: 18px 28px; font-family: Fraunces, serif; font-weight: 650; font-size: 28px; cursor: pointer; color: var(--ink); }
+  .chips button.sel { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 16%, var(--card)); color: var(--gold-deep); }
+  .field label { display: block; font-weight: 600; font-size: 14px; color: var(--muted); margin-bottom: 6px; }
+  .field input { width: 100%; max-width: 520px; padding: 14px 16px; border-radius: 14px; border: 2px solid var(--line); font: 500 18px Inter, sans-serif; background: var(--card); color: var(--ink); }
+  .field input:focus { outline: none; border-color: var(--gold); }
+  .btnrow { display: flex; gap: 10px; margin-top: 20px; align-items: center; }
+  .btnrow .sp { flex: 1; }
+  .btn { border: 0; border-radius: 14px; padding: 15px 24px; cursor: pointer; font: 600 17px Inter, sans-serif; }
+  .btn.gold { background: var(--gold); color: #22262E; }
+  .btn.ghost { background: var(--card); color: var(--ink); border: 2px solid var(--line); }
+
+  /* PIN */
+  .overlay { position: fixed; inset: 0; background: rgba(20,23,28,.55); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+  .overlay.show { display: flex; }
+  .modal { background: var(--card); border-radius: 24px; width: min(400px, 94vw); padding: 24px 26px; box-shadow: 0 30px 90px rgba(0,0,0,.35); text-align: center; }
+  .modal h3 { font-family: Fraunces, serif; font-weight: 650; font-size: 26px; margin: 0 0 4px; }
+  .modal .sub { color: var(--muted); font-size: 15px; margin: 0 0 8px; }
+  .pin-dots { display: flex; gap: 14px; justify-content: center; margin: 16px 0 8px; }
+  .pin-dots .d { width: 16px; height: 16px; border-radius: 50%; background: var(--line); }
+  .pin-dots .d.on { background: var(--gold-deep); }
+  .pin-msg { color: var(--red); font-weight: 600; min-height: 22px; font-size: 15px; }
+  .pin-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 280px; margin: 8px auto 0; }
+  .pin-pad button { aspect-ratio: 1.15; border-radius: 16px; border: 1px solid var(--line); background: var(--chip); font-family: Fraunces, serif; font-weight: 650; font-size: 26px; cursor: pointer; color: var(--ink); }
+  .pin-pad button:active { background: var(--line); }
+
+  /* effects */
+  .fly-star { position: fixed; z-index: 200; font-size: 30px; pointer-events: none; transition: transform .7s cubic-bezier(.2,.7,.3,1), opacity .7s; will-change: transform; }
+  .confetti { position: fixed; z-index: 300; pointer-events: none; will-change: transform; line-height: 1; }
 
   .foot { position: fixed; right: 18px; bottom: 8px; font-size: 12px; color: var(--muted); opacity: .7; }
+  .foot.stale { color: #fff; background: var(--red); opacity: 1; padding: 4px 10px; border-radius: 999px; font-weight: 600; }
   .fsbtn { position: fixed; left: 14px; bottom: 8px; font: 500 13px Inter, sans-serif; color: var(--muted); background: var(--chip); border: 0; border-radius: 999px; padding: 6px 12px; opacity: .8; cursor: pointer; }
-  .fsbtn:active { opacity: 1; }
   body.fs .fsbtn { display: none; }
-  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-size: 15px; opacity: 0; transition: opacity .25s; pointer-events: none; }
+  .toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 12px 20px; border-radius: 14px; font-size: 17px; font-weight: 500; opacity: 0; transition: opacity .25s; pointer-events: none; z-index: 400; }
   .toast.show { opacity: 1; }
   .setup { max-width: 640px; margin: 80px auto; background: var(--card); border-radius: 18px; padding: 24px 28px; box-shadow: var(--shadow); font-size: 17px; line-height: 1.5; }
   .setup code { background: var(--chip); padding: 2px 6px; border-radius: 6px; font-size: 15px; }
@@ -146,6 +260,11 @@
     main { grid-template-columns: 1fr; }
     .clock { font-size: 52px; }
     header { flex-wrap: wrap; }
+    .banner { order: 3; flex-basis: 100%; }
+    .kids { overflow: visible; }
+    .ks { overflow-y: auto; }
+    .ks-body { grid-template-columns: 1fr; }
+    .ks-top .name { font-size: 28px; }
   }
 </style>
 </head>
@@ -163,8 +282,12 @@
   <main>
     <div class="col">
       <section class="card grow">
-        <h2>Today <span class="pill" id="todayCount"></span></h2>
+        <h2><span id="agendaTitle">Today</span> <span class="pill" id="todayCount"></span></h2>
         <div class="scroll" id="agenda"></div>
+      </section>
+      <section class="card hidden" id="notesCard">
+        <h2>Family notes</h2>
+        <div id="notes"></div>
       </section>
       <section class="card">
         <h2>Dinners this week</h2>
@@ -176,6 +299,7 @@
       <section class="card grow">
         <h2>Ava · School</h2>
         <div class="scroll">
+          <div class="hero" id="grab" style="margin-bottom:10px"></div>
           <div class="lunch" id="lunch"></div>
           <div class="hero" id="schoolHero"></div>
         </div>
@@ -184,56 +308,163 @@
         <h2>Activities &amp; Sports</h2>
         <div id="soccer"></div>
       </section>
+      <section class="card">
+        <h2>Countdowns</h2>
+        <div class="cds" id="cds"></div>
+      </section>
     </div>
 
     <div class="col">
       <section class="card grow">
-        <h2>Chores <span class="pill" id="choreCount"></span></h2>
-        <div class="scroll" id="chores"></div>
-      </section>
-      <section class="card">
-        <h2>Birthdays</h2>
-        <div class="bdays" id="bdays"></div>
+        <h2>Star chart <span class="pill" id="starPill"></span></h2>
+        <div class="kids" id="kids"></div>
       </section>
     </div>
   </main>
 </div>
+
+<!-- Kid screen -->
+<div class="ks" id="ks">
+  <div class="ks-top">
+    <div class="avatar" id="ksAv"></div>
+    <div class="name" id="ksName"></div>
+    <div class="bal" id="ksBal"></div>
+    <button class="ks-close" id="ksClose">✕</button>
+  </div>
+  <div class="ks-body">
+    <div class="col">
+      <section class="card">
+        <h2>Star jar</h2>
+        <div class="bank"><div id="ksJar"></div><div class="bank-info"><div class="progress"><span id="ksBar"></span></div><div class="goal" id="ksGoal"></div><div class="bank-life" id="ksLife"></div></div></div>
+        <div class="week" id="ksWeek"></div>
+        <div class="ks-actions">
+          <button class="abtn spend" id="ksSpend">🎁 Spend stars</button>
+          <button class="abtn" id="ksBonus">✨ Bonus</button>
+        </div>
+      </section>
+      <section class="card grow">
+        <h2>Recently redeemed</h2>
+        <div class="scroll" id="ksLog"></div>
+      </section>
+    </div>
+    <section class="card grow">
+      <h2><span id="ksChoresTitle">Today's chores</span> <span class="pill" id="ksChoresPill"></span></h2>
+      <div class="scroll" id="ksChores"></div>
+    </section>
+  </div>
+
+  <div class="panel" id="storePanel">
+    <div class="ptop"><h3>🎁 Rewards store</h3><div class="bal" id="storeBal"></div><button class="ks-close" id="storeClose">✕</button></div>
+    <div class="rgrid" id="rgrid"></div>
+  </div>
+
+  <div class="panel" id="bonusPanel">
+    <div class="ptop"><h3>✨ Bonus stars</h3><button class="ks-close" id="bonusClose">✕</button></div>
+    <p style="margin:0 0 6px;color:var(--muted);font-size:17px" id="bonusSub"></p>
+    <div class="chips" id="chips"></div>
+    <div class="field"><label>What for? (optional)</label><input id="bonusNote" placeholder="Helped clean up without being asked"></div>
+    <div class="btnrow"><div class="sp"></div><button class="btn ghost" id="bonusCancel">Cancel</button><button class="btn gold" id="bonusGive">Give stars</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="pinOverlay">
+  <div class="modal">
+    <h3>Grown-ups only</h3>
+    <p class="sub" id="pinSub">Enter the PIN</p>
+    <div class="pin-dots" id="pinDots"></div>
+    <div class="pin-msg" id="pinMsg"></div>
+    <div class="pin-pad" id="pinPad"></div>
+    <div class="btnrow" style="justify-content:center"><button class="btn ghost" id="pinCancel">Cancel</button></div>
+  </div>
+</div>
+
 <button class="fsbtn" id="fsbtn">⛶ Full screen</button>
 <div class="foot" id="foot"></div>
 <div class="toast" id="toast"></div>
 
 <script>
-// ===== SETUP: paste your Apps Script Web App URL (ends in /exec) and the DASH_KEY from DashboardServer.gs =====
+// ===== SETUP: Apps Script Web App URL (ends in /exec) and the DASH_KEY from DashboardServer.gs =====
 const API_URL = 'https://script.google.com/macros/s/AKfycby9AQqzXH0zVAgI3AwnpMW6-DXpfiZcIoV4iIWrLKHfC1aN2AzRClFV-OfDts-xQX3BbQ/exec';
 const API_KEY = 'UML_Bourgeois!!47';
-// ========================================================================================================
+const EVENING_FROM = 18;          // hour when the dashboard flips to "tomorrow first"
+// ==================================================================================================
 
-const PEOPLE = { Paulo: '#1F3A5F', Amy: '#B35C8A', Ava: '#D9774B', Everyone: '#6E7380' };
 const WX = c => c === 0 ? ['☀️','Clear'] : c <= 2 ? ['🌤️','Partly cloudy'] : c === 3 ? ['☁️','Cloudy'] : c <= 48 ? ['🌫️','Fog']
   : c <= 57 ? ['🌦️','Drizzle'] : c <= 67 ? ['🌧️','Rain'] : c <= 77 ? ['🌨️','Snow'] : c <= 82 ? ['🌧️','Showers'] : c <= 86 ? ['🌨️','Snow showers'] : ['⛈️','Storms'];
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const pd = s => { const [y,m,d] = s.slice(0,10).split('-').map(Number); return new Date(y, m-1, d); };
 const pdt = s => new Date(s);
+const pad2 = n => String(n).padStart(2, '0');
+const key = d => d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
 const fmtT = d => d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).replace(':00','').replace(' ', '').toLowerCase();
 const dow = d => d.toLocaleDateString('en-US', { weekday: 'short' });
+const dowL = d => d.toLocaleDateString('en-US', { weekday: 'long' });
 const md = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 const daysBetween = (a, b) => Math.round((pd(b) - pd(a)) / 86400000);
-let DATA = null;
+const addDays = (d, n) => { const t = new Date(d); t.setDate(t.getDate() + n); return t; };
+const hm = s => { const [H, M] = s.split(':').map(Number); return H * 60 + M; };
+const fmtHM = s => { const [H, M] = s.split(':').map(Number); return (H % 12 || 12) + ':' + pad2(M) + (H < 12 ? 'am' : 'pm'); };
+const DAYL = ['S','M','T','W','T','F','S'];
+let DATA = null, lastOk = 0;
 
 function tickClock() {
   const n = new Date();
-  const h = n.getHours() % 12 || 12, m = String(n.getMinutes()).padStart(2, '0');
+  const h = n.getHours() % 12 || 12, m = pad2(n.getMinutes());
   $('clock').innerHTML = `${h}:${m}<small>${n.getHours() < 12 ? 'am' : 'pm'}</small>`;
   $('date').textContent = n.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
   document.body.classList.toggle('night', n.getHours() >= 20 || n.getHours() < 6);
   renderBanner();
+  if (lastOk) {
+    const stale = Date.now() - lastOk > 30 * 60 * 1000;
+    $('foot').classList.toggle('stale', stale);
+    if (stale) $('foot').textContent = '⚠ Not updated since ' + new Date(lastOk).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  }
+  // flip to evening/morning layout on the hour boundaries without waiting for a refresh
+  if (DATA && (n.getMinutes() === 0) && (n.getHours() === EVENING_FROM || n.getHours() === 0)) render(DATA);
 }
 
+// ---------- school & specials helpers
+function schoolStatus(dateObj) {
+  if (!DATA || !DATA.config) return { school: false };
+  const k = key(dateObj), wd = dateObj.getDay();
+  if (wd === 0 || wd === 6) return { school: false };
+  if (k < DATA.config.firstDay) return { school: false };
+  const last = DATA.school.find(s => s.type === 'Last Day');
+  if (last && k > last.date) return { school: false };
+  const off = DATA.school.find(s => s.type === 'No School' && s.date <= k && k <= s.end);
+  if (off) return { school: false, reason: off.desc };
+  const er = DATA.school.find(s => s.type === 'Early Release' && s.date <= k && k <= s.end);
+  return { school: true, early: !!er };
+}
+function specialsFor(dateObj) {
+  const sp = (DATA.info && DATA.info.specials) || [];
+  const name = dowL(dateObj).toLowerCase(), abbr = name.slice(0, 3);
+  return sp.filter(s => s.days.toLowerCase().split(/[,/&]+/).some(x => { x = x.trim(); return x && (x === name || x.slice(0, 3) === abbr); }));
+}
+function weatherTip(dayIdx) {
+  const w = DATA.weather && DATA.weather.days && DATA.weather.days[dayIdx];
+  if (!w) return null;
+  if (w.code >= 71 && w.code <= 86 && w.code !== 80 && w.code !== 81 && w.code !== 82) return '❄️ Snow — boots & mittens';
+  if (w.rain >= 40) return `☔ ${w.rain}% rain — jacket`;
+  if (w.hi <= 40) return `🧥 High ${w.hi}° — warm coat`;
+  if (w.hi <= 55) return `🧥 High ${w.hi}° — jacket`;
+  if (w.hi >= 82) return `💧 High ${w.hi}° — water bottle`;
+  return null;
+}
+/** Things to remember for a school day: specials + weather. dayIdx 0 = today, 1 = tomorrow */
+function grabList(dateObj, dayIdx) {
+  const items = specialsFor(dateObj).map(s => `${s.icon} ${s.label}` + (s.label === 'PE day' ? ' — sneakers' : s.label === 'Library day' ? ' — return books' : ''));
+  const wt = weatherTip(dayIdx); if (wt) items.push(wt);
+  return items;
+}
+
+// ---------- main render
 function render(d) {
   DATA = d;
-  const today = d.today, tmrw = (() => { const t = pd(today); t.setDate(t.getDate()+1); return t; })();
-  const tmrwKey = key(tmrw);
+  const now = new Date();
+  const today = d.today, tmrw = addDays(pd(today), 1), tmrwKey = key(tmrw);
+  const evening = now.getHours() >= EVENING_FROM;
 
   // weather
   if (d.weather) {
@@ -243,41 +474,71 @@ function render(d) {
         <div class="hl"><b>${w.hi}°</b> ${w.lo}°</div>${w.rain >= 30 ? `<div class="rain">💧${w.rain}%</div>` : '<div class="rain">&nbsp;</div>'}</div>`).join('');
   }
 
-  // agenda
-  const now = new Date();
+  // agenda (morning: today first · evening: tomorrow first)
   const byDay = {};
   d.events.forEach(e => { const k = e.start.slice(0,10); (byDay[k] = byDay[k] || []).push(e);
-    if (e.allDay) { let s = pd(e.start); s.setDate(s.getDate()+1); while (s < pd(e.end)) { const kk = key(s); (byDay[kk] = byDay[kk] || []).push(e); s.setDate(s.getDate()+1); } } });
+    if (e.allDay) { let s = addDays(pd(e.start), 1); while (s < pd(e.end)) { const kk = key(s); (byDay[kk] = byDay[kk] || []).push(e); s = addDays(s, 1); } } });
   const evRow = e => {
     const s = pdt(e.start), en = pdt(e.end);
     const cls = !e.allDay && en < now ? 'past' : (!e.allDay && s <= now && en > now ? 'now' : '');
     return `<div class="ev ${cls}"><div class="tm">${e.allDay ? 'All day' : fmtT(s)}</div><div><div class="tt">${esc(e.title)}</div>${e.location ? `<div class="loc">${esc(e.location)}</div>` : ''}</div></div>`;
   };
   const todayEv = byDay[today] || [], tmrwEv = byDay[tmrwKey] || [];
-  $('todayCount').textContent = todayEv.length ? `${todayEv.length} event${todayEv.length > 1 ? 's' : ''}` : 'Free day';
-  let html = todayEv.length ? todayEv.map(evRow).join('') : '<div class="empty">Nothing on the family calendar today.</div>';
-  html += `<div class="dayhead" style="margin-top:14px">Tomorrow<span>${dow(tmrw)} ${md(tmrw)}</span></div>`;
-  html += tmrwEv.length ? tmrwEv.map(evRow).join('') : '<div class="empty">Nothing planned.</div>';
+  const tmrwStrip = () => {
+    const st = schoolStatus(tmrw), tags = [];
+    if (st.school) { tags.push(`<span class="tag info">🚌 School${st.early ? ' · early release 11:30' : ''}</span>`);
+      const l = d.lunch.find(x => x.date === tmrwKey); if (l) tags.push(`<span class="tag">🥪 ${esc(l.menu)}</span>`);
+      grabList(tmrw, 1).forEach(g => tags.push(`<span class="tag warn">${esc(g)}</span>`)); }
+    else if (st.reason) tags.push(`<span class="tag ok">😴 No school · ${esc(st.reason)}</span>`);
+    if (d.soccer && d.soccer.date === tmrwKey) tags.push(`<span class="tag ${d.soccer.driver ? 'ok' : 'warn'}">⚽ Soccer 9:45 · ${d.soccer.driver ? esc(d.soccer.driver) + ' driving' : 'driver not set'}</span>`);
+    const dinner = d.meals.find(m => m.date === tmrwKey); if (dinner && dinner.dinner) tags.push(`<span class="tag">🍽️ ${esc(dinner.dinner)}</span>`);
+    return tags.length ? `<div class="tmrw-strip">${tags.join('')}</div>` : '';
+  };
+  let html = '';
+  if (evening) {
+    $('agendaTitle').textContent = 'Tomorrow';
+    $('todayCount').textContent = `${dow(tmrw)} ${md(tmrw)}`;
+    html += tmrwStrip();
+    html += tmrwEv.length ? tmrwEv.map(evRow).join('') : '<div class="empty">Nothing on the family calendar tomorrow.</div>';
+    const left = todayEv.filter(e => e.allDay || pdt(e.end) > now);
+    if (left.length) html += `<div class="dayhead mt">Later tonight</div>` + left.map(evRow).join('');
+  } else {
+    $('agendaTitle').textContent = 'Today';
+    $('todayCount').textContent = todayEv.length ? `${todayEv.length} event${todayEv.length > 1 ? 's' : ''}` : 'Free day';
+    html += todayEv.length ? todayEv.map(evRow).join('') : '<div class="empty">Nothing on the family calendar today.</div>';
+    html += `<div class="dayhead mt">Tomorrow<span>${dow(tmrw)} ${md(tmrw)}</span></div>` + tmrwStrip();
+    html += tmrwEv.length ? tmrwEv.map(evRow).join('') : '<div class="empty">Nothing planned.</div>';
+  }
   const later = Object.keys(byDay).filter(k => k > tmrwKey).sort();
   if (later.length) {
-    html += `<div class="dayhead" style="margin-top:14px">Coming up</div>`;
+    html += `<div class="dayhead mt">Coming up</div>`;
     later.forEach(k => byDay[k].forEach(e => {
       html += `<div class="up"><div class="d">${dow(pd(k))} ${pd(k).getDate()}</div><div>${esc(e.title)}${e.allDay ? '' : ` <span style="color:var(--muted)">· ${fmtT(pdt(e.start))}</span>`}</div></div>`;
     }));
   }
   $('agenda').innerHTML = html;
 
-  // school hero
+  // notes
+  const notes = d.notes || [];
+  $('notesCard').classList.toggle('hidden', !notes.length);
+  $('notes').innerHTML = notes.map(n => `<div class="note"><span>${esc(n.note)}</span><div class="by">${esc(n.from)}${n.from && n.date ? ' · ' : ''}${n.date ? md(pd(n.date)) : ''}</div></div>`).join('');
+
+  // school card
   const nxt = t => d.school.find(s => s.type === t && s.end >= today);
   const ns = nxt('No School'), er = nxt('Early Release');
   const other = d.school.find(s => s.end >= today && !['No School','Early Release'].includes(s.type));
   const away = s => { const n = daysBetween(today, s.date); return n <= 0 ? 'Today' : n === 1 ? 'Tomorrow' : `in ${n} days`; };
   const stat = (k, s, cls) => s ? `<div class="stat ${cls}"><div class="k">${k}</div><div class="v">${dow(pd(s.date))} ${md(pd(s.date))}</div><div class="s">${esc(s.desc.replace(/ – dismissal 11:30/,''))} · ${away(s)}</div></div>` : '';
-  $('schoolHero').innerHTML = stat('No school', ns, 'red') + stat('Early release · 11:30', er, 'amber') +
-    (other && daysBetween(today, other.date) <= 21 ? `<div class="stat" style="grid-column:1/-1"><div class="k">Next up</div><div class="s" style="color:var(--ink);font-size:16px;margin-top:3px"><b>${dow(pd(other.date))} ${md(pd(other.date))}</b> · ${esc(other.desc)}</div></div>` : '') +
-    (d.info && (d.info.bus || d.info.pickup) ? `<div class="stat" style="grid-column:1/-1"><div class="k">Bus</div><div class="s" style="color:var(--ink);font-size:16px;margin-top:3px">${d.info.bus ? '#' + esc(d.info.bus) : ''} ${d.info.pickup ? '· pickup ' + esc(d.info.pickup) : ''} ${d.info.dropoff ? '· home ' + esc(d.info.dropoff) : ''}</div></div>` : '');
-  const lunches = d.lunch.slice(0, 2);
-  $('lunch').innerHTML = lunches.length ? lunches.map(l => `<div class="row ${l.date === today ? 'hl' : ''}"><div class="d">${l.date === today ? 'Lunch today' : dow(pd(l.date))}</div><div>${esc(l.menu)}</div></div>`).join('')
+  const focusDay = evening ? tmrw : pd(today), focusSt = schoolStatus(focusDay);
+  const grab = focusSt.school ? grabList(focusDay, evening ? 1 : 0) : [];
+  $('grab').innerHTML = grab.length ? `<div class="stat wide"><div class="k">${evening ? 'Tomorrow' : 'Today'} · remember</div><div class="s ink">${grab.map(esc).join(' · ')}</div></div>` : '';
+  $('grab').style.display = grab.length ? '' : 'none';
+  $('schoolHero').innerHTML =
+    stat('No school', ns, 'red') + stat('Early release · 11:30', er, 'amber') +
+    (other && daysBetween(today, other.date) <= 21 ? `<div class="stat wide"><div class="k">Next up</div><div class="s ink"><b>${dow(pd(other.date))} ${md(pd(other.date))}</b> · ${esc(other.desc)}</div></div>` : '') +
+    (d.info && (d.info.bus || d.info.pickup) ? `<div class="stat wide"><div class="k">Bus</div><div class="s ink">${d.info.bus ? '#' + esc(d.info.bus) : ''} ${d.info.pickup ? '· pickup ' + esc(d.info.pickup) : ''} ${d.info.dropoff ? '· home ' + esc(d.info.dropoff) : ''}</div></div>` : '');
+  const lunches = d.lunch.filter(l => evening ? l.date > today : true).slice(0, 2);
+  $('lunch').innerHTML = lunches.length ? lunches.map(l => `<div class="row ${l.date === today || (evening && l.date === tmrwKey) ? 'hl' : ''}"><div class="d">${l.date === today ? 'Lunch' : l.date === tmrwKey ? 'Tomorrow' : dow(pd(l.date))}</div><div>${esc(l.menu)}</div></div>`).join('')
     : '<div class="empty">No lunch menu loaded.</div>';
 
   // activities & sports
@@ -290,13 +551,12 @@ function render(d) {
   if (s) acts.push({ key: s.date + 'T09:45', html: `<div class="act"><div class="ball">⚽</div><div><div class="big">${when(s.date, '9:45')} <span>Soccer</span></div>
       <div class="sub">${esc(s.place)} · ${s.left} game${s.left === 1 ? '' : 's'} left</div>
       <span class="tag ${s.driver ? 'ok' : 'warn'}">${s.driver ? '🚗 ' + esc(s.driver) : 'Driver not set'}</span>${s.snack ? '<span class="tag warn">🍊 Our snack week</span>' : ''}</div></div>` });
-  const nowT = new Date();
   ((d.config && d.config.activities) || []).forEach(a => {
-    const ev = d.events.find(e => !e.allDay && e.title.toLowerCase().includes(a.match.toLowerCase()) && pdt(e.end) > nowT);
+    const ev = d.events.find(e => !e.allDay && e.title.toLowerCase().includes(a.match.toLowerCase()) && pdt(e.end) > now);
     if (!ev) return;
     const st = pdt(ev.start);
     acts.push({ key: ev.start.slice(0, 16), html: `<div class="act"><div class="ball">${a.icon}</div><div><div class="big">${when(ev.start.slice(0, 10), fmtT(st))} <span>${esc(a.label)}</span></div>
-      <div class="sub">${esc((ev.location || '').split(',')[0])}${st <= nowT ? ' · happening now' : ''}</div></div></div>` });
+      <div class="sub">${esc((ev.location || '').split(',')[0])}${st <= now ? ' · happening now' : ''}</div></div></div>` });
   });
   acts.sort((x, y) => x.key < y.key ? -1 : 1);
   $('soccer').innerHTML = acts.length ? acts.map(x => x.html).join('') : '<div class="empty">Nothing scheduled this week.</div>';
@@ -305,80 +565,255 @@ function render(d) {
   $('meals').innerHTML = d.meals.length ? d.meals.map(m => `<div class="m ${m.date === today ? 'today' : ''}"><div class="d">${dow(pd(m.date))}</div><div>${m.dinner ? esc(m.dinner) : '<span style="color:var(--muted)">—</span>'}</div></div>`).join('')
     : '<div class="empty">Set a week on the Meal Plan tab.</div>';
 
-  // chores
-  const groups = {};
-  d.chores.forEach(c => (groups[c.who] = groups[c.who] || []).push(c));
-  const open = d.chores.filter(c => !c.done).length;
-  $('choreCount').textContent = open ? `${open} open` : 'All done 🎉';
-  $('chores').innerHTML = Object.keys(groups).map(w => `<div class="who"><span><span class="avatar" style="background:${PEOPLE[w] || '#6E7380'}">${esc(w[0])}</span>${esc(w)}</span><span>${groups[w].filter(c => !c.done).length} left</span></div>` +
-    groups[w].map(c => `<div class="chk ${c.done ? 'done' : ''}" data-row="${c.row}"><div class="box"></div><div class="lbl">${esc(c.chore)}</div><div class="meta">${esc(c.day || c.freq || '')}</div></div>`).join('')).join('')
-    || '<div class="empty">No chores yet — add them on the Chores tab.</div>';
-
-  renderBirthdays(); renderBanner();
+  renderCountdowns(); renderKids(); renderBanner();
+  if (KS.kid) renderKidScreen();
+  $('foot').classList.remove('stale');
   $('foot').textContent = 'Updated ' + new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
 }
 
-const pad2 = n => String(n).padStart(2, '0');
-const key = d => d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
-const hm = s => { const [H, M] = s.split(':').map(Number); return H * 60 + M; };
-const fmtHM = s => { const [H, M] = s.split(':').map(Number); return (H % 12 || 12) + ':' + pad2(M) + (H < 12 ? 'am' : 'pm'); };
-
+// ---------- countdowns (birthdays + Events tab)
 function nextBirthday(b, now) {
   const born = pd(b.born), t0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   let nb = new Date(t0.getFullYear(), born.getMonth(), born.getDate());
   if (nb < t0) nb = new Date(t0.getFullYear() + 1, born.getMonth(), born.getDate());
   return { date: nb, days: Math.round((nb - t0) / 86400000), age: nb.getFullYear() - born.getFullYear() };
 }
-
-function renderBirthdays() {
+function renderCountdowns() {
   if (!DATA || !DATA.config) return;
-  const now = new Date();
-  $('bdays').innerHTML = DATA.config.birthdays.map(b => {
-    const n = nextBirthday(b, now);
-    const v = n.days === 0 ? 'Today! 🎉' : n.days === 1 ? 'Tomorrow' : `${n.days}<small> days</small>`;
-    return `<div class="bd" style="--c:${b.color}"><div class="n">${esc(b.name)}</div><div class="v">${v}</div><div class="s">Turns ${n.age} · ${dow(n.date)} ${md(n.date)}</div></div>`;
-  }).join('');
+  const now = new Date(), items = [];
+  DATA.config.birthdays.forEach(b => { const n = nextBirthday(b, now); items.push({ label: `${b.name}'s birthday`, sub: `Turns ${n.age} · ${dow(n.date)} ${md(n.date)}`, emoji: '🎂', days: n.days, color: b.color }); });
+  (DATA.countdowns || []).forEach(c => { const dt = pd(c.date); items.push({ label: c.label, sub: `${dow(dt)} ${md(dt)}`, emoji: c.emoji, days: daysBetween(DATA.today, c.date), color: 'var(--navy)' }); });
+  items.sort((a, b) => a.days - b.days);
+  $('cds').innerHTML = items.slice(0, 3).map(i => {
+    const v = i.days === 0 ? 'Today!' : i.days === 1 ? 'Tomorrow' : `${i.days}<small> days</small>`;
+    return `<div class="cd" style="--c:${i.color}"><div class="em">${i.emoji}</div><div class="n">${esc(i.label)}<span class="s">${esc(i.sub)}</span></div><div class="v">${v}</div></div>`;
+  }).join('') || '<div class="empty">Add dates on the Events tab.</div>';
 }
 
-function schoolStatus(now) {
-  const k = key(now), wd = now.getDay();
-  if (wd === 0 || wd === 6) return { school: false };
-  if (k < DATA.config.firstDay) return { school: false };
-  const last = DATA.school.find(s => s.type === 'Last Day');
-  if (last && k > last.date) return { school: false };
-  const off = DATA.school.find(s => s.type === 'No School' && s.date <= k && k <= s.end);
-  if (off) return { school: false, reason: off.desc };
-  const er = DATA.school.find(s => s.type === 'Early Release' && s.date <= k && k <= s.end);
-  return { school: true, early: !!er };
-}
-
+// ---------- banner
 function renderBanner() {
   if (!DATA || !DATA.config) return;
-  const now = new Date(), c = DATA.config;
+  const now = new Date(), c = DATA.config, today0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const mins = now.getHours() * 60 + now.getMinutes();
   const door = hm(c.outTheDoor), from = hm(c.bannerFrom);
   const bday = c.birthdays.map(b => ({ b, n: nextBirthday(b, now) })).find(x => x.n.days === 0);
   let html = '';
   if (mins >= from && mins <= door + 15) {
-    const st = schoolStatus(now);
+    const st = schoolStatus(today0);
     if (st.school) {
       const left = door - mins;
-      const extra = st.early ? ' · Early release today, 11:30' : '';
-      if (left > 10) html = `<div class="bn"><div class="ico">🚌</div><div><div class="big">Out the door in ${left} min</div><div class="sm">Leave by ${fmtHM(c.outTheDoor)}${extra}</div></div></div>`;
-      else if (left > 5) html = `<div class="bn amber"><div class="ico">👟</div><div><div class="big">${left} min · shoes & backpack</div><div class="sm">Leave by ${fmtHM(c.outTheDoor)}${extra}</div></div></div>`;
-      else if (left > 0) html = `<div class="bn red"><div class="ico">🎒</div><div><div class="big">${left} min · head out!</div><div class="sm">Leave by ${fmtHM(c.outTheDoor)}${extra}</div></div></div>`;
-      else html = `<div class="bn red"><div class="ico">🚌</div><div><div class="big">Time to go!</div><div class="sm">It's past ${fmtHM(c.outTheDoor)}${extra}</div></div></div>`;
+      const bits = [`Leave by ${fmtHM(c.outTheDoor)}`].concat(st.early ? ['Early release 11:30'] : [], grabList(today0, 0));
+      const sm = bits.join(' · ');
+      if (left > 10) html = `<div class="bn"><div class="ico">🚌</div><div><div class="big">Out the door in ${left} min</div><div class="sm">${esc(sm)}</div></div></div>`;
+      else if (left > 5) html = `<div class="bn amber"><div class="ico">👟</div><div><div class="big">${left} min · shoes & backpack</div><div class="sm">${esc(sm)}</div></div></div>`;
+      else if (left > 0) html = `<div class="bn red"><div class="ico">🎒</div><div><div class="big">${left} min · head out!</div><div class="sm">${esc(sm)}</div></div></div>`;
+      else html = `<div class="bn red"><div class="ico">🚌</div><div><div class="big">Time to go!</div><div class="sm">It's past ${fmtHM(c.outTheDoor)}${st.early ? ' · Early release 11:30' : ''}</div></div></div>`;
     } else if (st.reason) {
       html = `<div class="bn calm"><div class="ico">😴</div><div><div class="big">No school today</div><div class="sm">${esc(st.reason)}</div></div></div>`;
+    }
+  } else if (now.getHours() >= EVENING_FROM && now.getHours() < 21) {
+    const tmrw = addDays(today0, 1), st = schoolStatus(tmrw);
+    if (st.school) {
+      const bits = grabList(tmrw, 1).concat(st.early ? ['Early release 11:30'] : []);
+      if (bits.length) html = `<div class="bn eve"><div class="ico">🌙</div><div><div class="big">Tomorrow: ${esc(bits[0])}</div>${bits.length > 1 ? `<div class="sm">${esc(bits.slice(1).join(' · '))}</div>` : `<div class="sm">Set out what's needed tonight</div>`}</div></div>`;
+    } else if (st.reason) {
+      html = `<div class="bn calm"><div class="ico">😴</div><div><div class="big">No school tomorrow</div><div class="sm">${esc(st.reason)}</div></div></div>`;
     }
   }
   if (!html && bday) html = `<div class="bn party"><div class="ico">🎂</div><div><div class="big">Happy birthday, ${esc(bday.b.name)}!</div><div class="sm">${bday.n.age} today 🎉</div></div></div>`;
   if ($('banner').innerHTML !== html) $('banner').innerHTML = html;
 }
 
-function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1800); }
+// ---------- STAR CHART
+const kidByName = n => DATA.stars && DATA.stars.kids.find(k => k.name === n);
+function choreActive(c, dateObj) {
+  const d = (c.days || 'Daily').trim().toLowerCase(), wd = dateObj.getDay();
+  if (!d || d === 'daily' || d === 'every day') return true;
+  if (d === 'weekdays') return wd >= 1 && wd <= 5;
+  if (d === 'school days') return schoolStatus(dateObj).school;
+  if (d === 'weekends') return wd === 0 || wd === 6;
+  const abbr = dowL(dateObj).slice(0, 3).toLowerCase();
+  return d.split(/[,/&\s]+/).some(x => x.slice(0, 3) === abbr);
+}
+function nextReward(kid) { return (DATA.stars.rewards || []).find(r => r.cost > kid.balance) || null; }
+function goalLine(kid) {
+  const n = nextReward(kid);
+  return n ? `<b>${n.cost - kid.balance}</b> more to ${n.emoji} ${esc(n.label)}` : (DATA.stars.rewards.length ? '🎉 Can get any reward!' : 'Add rewards on the Rewards tab');
+}
+function goalPct(kid) { const n = nextReward(kid); return n ? Math.min(100, Math.round(kid.balance / n.cost * 100)) : 100; }
+function choreRow(kid, c, big) {
+  const done = kid.doneToday.includes(c.label);
+  return `<div class="kc ${done ? 'done' : ''}" data-kid="${esc(kid.name)}" data-label="${esc(c.label)}"><span class="em">${c.emoji}</span><span class="lbl">${esc(c.label)}</span><span class="check">✓</span></div>`;
+}
+function renderKids() {
+  const st = DATA.stars;
+  if (!st) { $('kids').innerHTML = '<div class="empty">Run <b>setupStars</b> in Apps Script to add the star-chart tabs, then redeploy.</div>'; $('starPill').textContent = ''; return; }
+  const today0 = pd(DATA.today);
+  let totalOpen = 0;
+  $('kids').innerHTML = st.kids.map(kid => {
+    const active = kid.chores.filter(c => choreActive(c, today0));
+    const open = active.filter(c => !kid.doneToday.includes(c.label)).length; totalOpen += open;
+    return `<div class="kid" style="--kid:${kid.color}">
+      <div class="kid-head" data-open="${esc(kid.name)}"><div class="avatar">${esc(kid.name[0])}</div>
+        <div class="kid-name">${esc(kid.name)}${kid.streak >= 2 ? `<span class="streak">🔥 ${kid.streak}-day streak</span>` : ''}</div>
+        <div class="kid-bal">⭐ ${kid.balance}</div><div class="kid-open">›</div></div>
+      <div class="progress"><span style="width:${goalPct(kid)}%"></span></div>
+      <div class="goal">${goalLine(kid)}</div>
+      ${active.length ? active.map(c => choreRow(kid, c)).join('') : '<div class="empty" style="font-size:15px">No chores today 🎈</div>'}
+      ${active.length && !open ? '<div class="all">All done today — great job! 🌟</div>' : ''}
+    </div>`;
+  }).join('');
+  $('starPill').textContent = totalOpen ? `${totalOpen} to do` : 'All done 🎉';
+}
 
-// ---- API (Apps Script web app, all GETs)
+// tap a chore (dashboard or kid screen)
+document.addEventListener('click', e => {
+  const el = e.target.closest('.kc'); if (!el) return;
+  const kid = kidByName(el.dataset.kid); if (!kid) return;
+  const label = el.dataset.label, wasDone = kid.doneToday.includes(label), done = !wasDone;
+  // optimistic update
+  if (done) { kid.doneToday.push(label); kid.balance++; kid.earned++; kid.week[6].stars++; flyStar(el); }
+  else { kid.doneToday = kid.doneToday.filter(x => x !== label); kid.balance--; kid.earned--; kid.week[6].stars = Math.max(0, kid.week[6].stars - 1); }
+  renderKids(); if (KS.kid) renderKidScreen();
+  api({ action: 'kidChore', kid: kid.name, label, done }).then(() => setTimeout(load, 1500)).catch(err => { toast('Not saved: ' + err.message); load(); });
+});
+document.addEventListener('click', e => {
+  const h = e.target.closest('.kid-head'); if (!h) return;
+  openKid(h.dataset.open);
+});
+
+// ---------- KID SCREEN
+const KS = { kid: null };
+function openKid(name) { KS.kid = name; renderKidScreen(); $('ks').classList.add('show'); }
+function closeKid() { KS.kid = null; $('ks').classList.remove('show'); $('storePanel').classList.remove('show'); $('bonusPanel').classList.remove('show'); }
+$('ksClose').addEventListener('click', closeKid);
+
+const JAR_PTS = [[22,80],[34,80],[46,80],[58,80],[24,68],[36,68],[48,68],[58,68],[28,56],[40,56],[52,56],[30,44],[42,44],[54,44],[34,33],[46,33]];
+function jarSvg(kid) {
+  const pct = goalPct(kid) / 100, top = 26, bot = 88, fillTop = bot - pct * (bot - top);
+  const stars = JAR_PTS.slice(0, Math.round(pct * JAR_PTS.length)).map(p => `<text x="${p[0]}" y="${p[1] + 4}" font-size="13" text-anchor="middle">⭐</text>`).join('');
+  const path = 'M14,26 L66,26 Q70,26 70,40 L70,82 Q70,90 60,90 L20,90 Q10,90 10,82 L10,40 Q10,26 14,26 Z';
+  return `<svg class="jar" viewBox="0 0 80 96" aria-hidden="true"><defs><clipPath id="jarclip"><path d="${path}"/></clipPath></defs>
+    <path class="glass" d="${path}"/><g clip-path="url(#jarclip)"><rect x="6" y="${fillTop.toFixed(1)}" width="68" height="90" fill="rgba(240,180,41,.32)"/>${stars}</g>
+    <rect class="lid" x="16" y="12" width="48" height="12" rx="5"/><rect class="lid" x="22" y="7" width="36" height="8" rx="4"/>
+    <rect x="16" y="32" width="5" height="40" rx="2.5" fill="rgba(255,255,255,.6)"/></svg>`;
+}
+function renderKidScreen() {
+  const kid = kidByName(KS.kid); if (!kid) return closeKid();
+  const ks = $('ks'); ks.style.setProperty('--kid', kid.color);
+  $('ksAv').textContent = kid.name[0];
+  $('ksName').innerHTML = esc(kid.name) + (kid.streak >= 2 ? `<span class="streak">🔥 ${kid.streak}-day streak</span>` : '');
+  $('ksBal').innerHTML = `⭐ ${kid.balance}<small>to spend</small>`;
+  $('ksJar').innerHTML = jarSvg(kid);
+  $('ksBar').style.width = goalPct(kid) + '%';
+  $('ksGoal').innerHTML = goalLine(kid);
+  $('ksLife').textContent = `${kid.earned} earned all-time · ${kid.spent} spent`;
+  $('ksWeek').innerHTML = kid.week.map((w, i) => `<div class="day ${w.stars ? 'has' : ''} ${i === 6 ? 'today' : ''}"><div class="dot">${w.stars || ''}</div><div class="dl">${DAYL[pd(w.date).getDay()]}</div></div>`).join('');
+  const cheapest = DATA.stars.rewards[0];
+  $('ksSpend').classList.toggle('locked', !(cheapest && kid.balance >= cheapest.cost));
+  $('ksLog').innerHTML = kid.redemptions.length ? kid.redemptions.map(r => `<div class="redeem"><span>${r.emoji}</span><span>${esc(r.label)}</span><span class="when">−${r.cost} ⭐ · ${md(pd(r.date))}</span></div>`).join('')
+    : '<div class="empty">Nothing spent yet — the jar is filling up!</div>';
+  const today0 = pd(DATA.today), active = kid.chores.filter(c => choreActive(c, today0));
+  const open = active.filter(c => !kid.doneToday.includes(c.label)).length;
+  $('ksChoresTitle').textContent = `${dowL(today0)}'s chores`;
+  $('ksChoresPill').textContent = active.length ? (open ? `${open} left` : 'All done 🌟') : '';
+  $('ksChores').innerHTML = active.length ? active.map(c => choreRow(kid, c)).join('') : '<div class="empty">No chores today 🎈</div>';
+}
+
+// store
+$('ksSpend').addEventListener('click', () => {
+  const kid = kidByName(KS.kid); if (!kid) return;
+  if (!DATA.stars.rewards.length) return toast('Add rewards on the Rewards tab first');
+  renderStore(); $('storePanel').classList.add('show');
+});
+$('storeClose').addEventListener('click', () => $('storePanel').classList.remove('show'));
+function renderStore() {
+  const kid = kidByName(KS.kid); if (!kid) return;
+  $('storeBal').textContent = `⭐ ${kid.balance}`;
+  $('rgrid').innerHTML = DATA.stars.rewards.map(r => {
+    const ok = kid.balance >= r.cost;
+    return `<div class="rcard ${ok ? 'afford' : 'cant'}" data-row="${r.row}"><div class="rem">${r.emoji}</div><div class="rl">${esc(r.label)}</div><div class="rc">${ok ? r.cost + ' ⭐' : (r.cost - kid.balance) + ' more ⭐'}</div></div>`;
+  }).join('');
+}
+$('rgrid').addEventListener('click', e => {
+  const card = e.target.closest('.rcard.afford'); if (!card) return;
+  const kid = kidByName(KS.kid), r = DATA.stars.rewards.find(x => x.row === +card.dataset.row); if (!kid || !r) return;
+  const go = pin => {
+    api({ action: 'redeem', kid: kid.name, row: r.row, pin: pin || '' }).then(() => {
+      const rect = card.getBoundingClientRect(); confetti(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      toast(`🎉 ${kid.name} got ${r.emoji} ${r.label}!`); $('storePanel').classList.remove('show'); load();
+    }).catch(err => { if (/PIN/.test(err.message)) askPin(`Spend ${r.cost} stars on ${r.label}`, go, 'Wrong PIN — try again'); else toast(err.message); });
+  };
+  if (DATA.stars.spendNeedsPin) askPin(`Spend ${r.cost} stars on ${r.label}`, go); else if (confirm(`Spend ${r.cost} stars on ${r.emoji} ${r.label}?`)) go('');
+});
+
+// bonus
+let bonusAmt = 1, bonusPin = '';
+$('ksBonus').addEventListener('click', () => askPin('Give bonus stars', pin => { bonusPin = pin; bonusAmt = 1; renderBonus(); $('bonusPanel').classList.add('show'); }));
+$('bonusClose').addEventListener('click', () => $('bonusPanel').classList.remove('show'));
+$('bonusCancel').addEventListener('click', () => $('bonusPanel').classList.remove('show'));
+function renderBonus() {
+  const kid = kidByName(KS.kid); if (!kid) return;
+  $('bonusSub').textContent = `Extra stars for ${kid.name} — for going above and beyond.`;
+  $('chips').innerHTML = [1, 2, 3, 5, 10].map(n => `<button data-n="${n}" class="${n === bonusAmt ? 'sel' : ''}">+${n}</button>`).join('');
+  $('bonusNote').value = '';
+}
+$('chips').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; bonusAmt = +b.dataset.n; renderBonus(); });
+$('bonusGive').addEventListener('click', () => {
+  const kid = kidByName(KS.kid); if (!kid) return;
+  const note = $('bonusNote').value.trim();
+  $('bonusPanel').classList.remove('show');
+  api({ action: 'bonus', kid: kid.name, n: bonusAmt, pin: bonusPin, note }).then(() => {
+    const jar = document.querySelector('#ksJar .jar'); if (jar) { jar.classList.add('celebrate'); const r = jar.getBoundingClientRect(); confetti(r.left + r.width / 2, r.top + r.height / 2); }
+    toast(`✨ +${bonusAmt} bonus star${bonusAmt === 1 ? '' : 's'} for ${kid.name}!`); load();
+  }).catch(err => toast(err.message));
+});
+
+// PIN pad (validated by the server)
+let pinEntered = '', pinThen = null;
+function askPin(title, then, msg) {
+  pinEntered = ''; pinThen = then;
+  $('pinSub').textContent = title; $('pinMsg').textContent = msg || ''; renderPinDots();
+  $('pinOverlay').classList.add('show');
+}
+function renderPinDots() { $('pinDots').innerHTML = [0,1,2,3].map(i => `<div class="d ${i < pinEntered.length ? 'on' : ''}"></div>`).join(''); }
+$('pinPad').innerHTML = ['1','2','3','4','5','6','7','8','9','','0','⌫'].map(k => `<button data-k="${k}" ${k === '' ? 'style="visibility:hidden"' : ''}>${k}</button>`).join('');
+$('pinPad').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; const k = b.dataset.k;
+  if (k === '⌫') pinEntered = pinEntered.slice(0, -1); else if (k && pinEntered.length < 4) pinEntered += k;
+  renderPinDots();
+  if (pinEntered.length === 4) { $('pinOverlay').classList.remove('show'); const fn = pinThen, p = pinEntered; pinThen = null; if (fn) fn(p); }
+});
+$('pinCancel').addEventListener('click', () => { $('pinOverlay').classList.remove('show'); pinThen = null; });
+$('pinOverlay').addEventListener('click', e => { if (e.target.id === 'pinOverlay') { $('pinOverlay').classList.remove('show'); pinThen = null; } });
+
+// effects
+function flyStar(fromEl) {
+  const start = fromEl.querySelector('.em').getBoundingClientRect();
+  const target = (KS.kid ? document.querySelector('#ksBal') : fromEl.closest('.kid').querySelector('.kid-bal'));
+  const end = target ? target.getBoundingClientRect() : { left: start.left, top: start.top - 80, width: 28, height: 28 };
+  const s = document.createElement('div'); s.className = 'fly-star'; s.textContent = '⭐';
+  s.style.left = start.left + 'px'; s.style.top = start.top + 'px'; document.body.appendChild(s);
+  const dx = end.left + end.width / 2 - start.left - 15, dy = end.top + end.height / 2 - start.top - 15;
+  requestAnimationFrame(() => { s.style.transform = `translate(${dx}px,${dy}px) scale(.5) rotate(220deg)`; s.style.opacity = '.2'; });
+  setTimeout(() => s.remove(), 760);
+}
+function confetti(cx, cy) {
+  const colors = ['#F0B429', '#D9774B', '#3D8B62', '#7A6CF0', '#B35C8A', '#4D82B8'];
+  for (let i = 0; i < 46; i++) {
+    const p = document.createElement('div'); p.className = 'confetti';
+    if (Math.random() < .3) { p.textContent = '⭐'; p.style.fontSize = (12 + Math.random() * 12) + 'px'; }
+    else { p.style.background = colors[i % colors.length]; p.style.width = (6 + Math.random() * 6) + 'px'; p.style.height = (8 + Math.random() * 9) + 'px'; p.style.borderRadius = '2px'; }
+    p.style.left = cx + 'px'; p.style.top = cy + 'px'; document.body.appendChild(p);
+    const ang = -Math.PI / 2 + (Math.random() - .5) * Math.PI * 1.2, dist = 80 + Math.random() * 180;
+    const dx = Math.cos(ang) * dist, py = Math.sin(ang) * dist, fy = 150 + Math.random() * 220, rot = Math.random() * 720 - 360, dur = 950 + Math.random() * 800;
+    p.animate([{ transform: 'translate(0,0) rotate(0)', opacity: 1 }, { transform: `translate(${dx * .6}px,${py}px) rotate(${rot * .5}deg)`, opacity: 1, offset: .35 }, { transform: `translate(${dx}px,${py + fy}px) rotate(${rot}deg)`, opacity: 0 }], { duration: dur, easing: 'cubic-bezier(.2,.6,.4,1)' });
+    setTimeout(() => p.remove(), dur + 60);
+  }
+}
+function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 2200); }
+
+// ---------- API
 async function api(params) {
   const q = new URLSearchParams(Object.assign({ key: API_KEY, _: Date.now() }, params));
   const r = await fetch(API_URL + '?' + q, { redirect: 'follow', cache: 'no-store' });
@@ -386,36 +821,26 @@ async function api(params) {
   if (j.error) throw new Error(j.error);
   return j;
 }
+let loading = false;
 function load() {
-  api({}).then(render).catch(e => toast('Could not refresh: ' + e.message));
+  if (loading) return; loading = true;
+  api({}).then(d => { lastOk = Date.now(); render(d); }).catch(e => { toast('Could not refresh: ' + e.message); }).finally(() => { loading = false; });
 }
 
-document.addEventListener('click', e => {
-  const el = e.target.closest('.chk'); if (!el) return;
-  const done = !el.classList.contains('done'); el.classList.toggle('done', done);
-  const row = +el.dataset.row;
-  const it = DATA.chores.find(x => x.row === row); if (it) it.done = done;
-  render(DATA);
-  api({ action: 'chore', row, done }).catch(err => { if (it) it.done = !done; render(DATA); toast('Not saved: ' + err.message); });
-});
-
-// ---- full screen + keep the screen awake where the browser allows it
+// ---------- full screen + wake lock
 const fsEl = document.documentElement;
-function goFullscreen() {
+$('fsbtn').addEventListener('click', () => {
   const req = fsEl.requestFullscreen || fsEl.webkitRequestFullscreen;
   if (!req) return toast('Full screen is not available in this browser');
   Promise.resolve(req.call(fsEl)).catch(() => toast('Full screen was blocked by the browser'));
-}
-$('fsbtn').addEventListener('click', goFullscreen);
+});
 document.addEventListener('fullscreenchange', () => document.body.classList.toggle('fs', !!document.fullscreenElement));
 document.addEventListener('webkitfullscreenchange', () => document.body.classList.toggle('fs', !!document.webkitFullscreenElement));
-async function keepAwake() {
-  try { if ('wakeLock' in navigator) await navigator.wakeLock.request('screen'); } catch (e) {}
-}
-document.addEventListener('visibilitychange', () => { if (!document.hidden) keepAwake(); });
+async function keepAwake() { try { if ('wakeLock' in navigator) await navigator.wakeLock.request('screen'); } catch (e) {} }
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { keepAwake(); load(); } });
 keepAwake();
 
-// ---- boot
+// ---------- boot
 if (!API_URL || !API_KEY) {
   document.querySelector('.wrap').innerHTML = `<div class="setup"><b>Almost there.</b> Open <code>index.html</code> and paste your Apps Script Web App URL into
     <code>API_URL</code> and your <code>DASH_KEY</code> into <code>API_KEY</code> near the top of the &lt;script&gt; section.</div>`;
