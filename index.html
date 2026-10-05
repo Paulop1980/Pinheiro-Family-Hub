@@ -297,11 +297,12 @@
 
     <div class="col">
       <section class="card grow">
-        <h2>Ava · School</h2>
+        <h2>School · Ava &amp; Patrick</h2>
         <div class="scroll">
           <div class="hero" id="grab" style="margin-bottom:10px"></div>
           <div class="lunch" id="lunch"></div>
           <div class="hero" id="schoolHero"></div>
+          <div class="hero" id="patrick" style="margin-top:10px"></div>
         </div>
       </section>
       <section class="card">
@@ -540,6 +541,27 @@ function render(d) {
   const lunches = d.lunch.filter(l => evening ? l.date > today : true).slice(0, 2);
   $('lunch').innerHTML = lunches.length ? lunches.map(l => `<div class="row ${l.date === today || (evening && l.date === tmrwKey) ? 'hl' : ''}"><div class="d">${l.date === today ? 'Lunch' : l.date === tmrwKey ? 'Tomorrow' : dow(pd(l.date))}</div><div>${esc(l.menu)}</div></div>`).join('')
     : '<div class="empty">No lunch menu loaded.</div>';
+
+  // true when a Mon–Wed class day falls between today and the next class (a holiday or vacation gap)
+  const skippedClassDay = (fromKey, toKey) => { for (let t = addDays(pd(fromKey), 1); key(t) < toKey; t = addDays(t, 1)) { if (t.getDay() >= 1 && t.getDay() <= 3) return true; } return false; };
+  // Patrick · preschool (from the family calendar: "Patrick Preschool" events)
+  const preKey = e => !e.allDay && /patrick/i.test(e.title) && /preschool/i.test(e.title);
+  const pre = d.events.filter(preKey).sort((a, b) => a.start < b.start ? -1 : 1);
+  const preToday = pre.find(e => e.start.slice(0, 10) === today);
+  const preNext = pre.find(e => pdt(e.end) > now && (evening ? e.start.slice(0, 10) > today : true));
+  const hm12 = e => fmtT(pdt(e.start)) + '–' + fmtT(pdt(e.end));
+  let pk = '';
+  if (!evening && preToday && pdt(preToday.end) > now) {
+    const inNow = pdt(preToday.start) <= now;
+    pk = `<b>${inNow ? 'At preschool now' : 'Preschool today'}</b> · ${hm12(preToday)} · pickup ${fmtT(pdt(preToday.end))}`;
+  } else if (preNext) {
+    const dk = preNext.start.slice(0, 10), n = daysBetween(today, dk);
+    pk = `<b>${n === 0 ? 'Today' : n === 1 ? 'Tomorrow' : dow(pd(dk)) + ' ' + md(pd(dk))}</b> · ${hm12(preNext)}` +
+      (skippedClassDay(today, dk) ? ` <span style="color:var(--muted)">· no preschool until then</span>` : '');
+  } else {
+    pk = '<span style="color:var(--muted)">No preschool this week</span>';
+  }
+  $('patrick').innerHTML = `<div class="stat wide"><div class="k">🎒 Patrick · Preschool (CCP)</div><div class="s ink">${pk}</div></div>`;
 
   // activities & sports
   const when = (dkey, timeStr) => {
